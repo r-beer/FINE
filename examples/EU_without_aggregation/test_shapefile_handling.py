@@ -36,21 +36,21 @@ def aggregateRegions(path, col_and_index=False, replace_type=None):
                 elif replace_type == 'mean':
                     df_2.loc[col_nation[-2:], row_nation[-2:]] += df.loc[col_nation, row_nation].mean().mean()
 
-        df_2.to_csv(path[:-5] + '_aggregated' + '.csv')
+        df_2.to_excel(path[:-5] + '_aggregated' + '.xlsx')
 
     else:
         df_2 = pd.DataFrame(0, columns=df.columns.str[-2:].unique(), index=np.arange(0, 8760))
         for str_nation in df.columns.str[-2:].unique():
             df_2[str_nation] = df.loc[:, df.columns.str[-2:] == str_nation].sum(axis=1)
 
-        df_2.to_csv(path[:-5] + '_aggregated' + '.csv')
+        df_2.to_excel(path[:-5] + '_aggregated' + '.xlsx')
         df_3 = df_2.copy()
 
         for col_name in df_3.columns:
             df_3[col_name] = df_3[col_name].max()
 
-        max_path = path[:-5] + '_aggregated_max.csv'
-        df_3.to_csv(max_path)
+        max_path = path[:-5] + '_aggregated_max.xlsx'
+        df_3.to_excel(max_path)
 
     print('data aggregated for:')
     print(path)
