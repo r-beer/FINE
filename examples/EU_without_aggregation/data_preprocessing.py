@@ -18,6 +18,7 @@ plt.title('sev2')
 path_e_highway_sev_full.plot()
 plt.title('sev-full')
 
+
 plt.show()
 
 
@@ -44,13 +45,9 @@ def aggregateRegions(path, col_and_index=False, replace_type=None):
             df_2[str_nation] = df.loc[:, df.columns.str[-2:] == str_nation].sum(axis=1)
 
         df_2.to_excel(path[:-5] + '_aggregated' + '.xlsx')
-        df_3 = df_2.copy()
-
-        for col_name in df_3.columns:
-            df_3[col_name] = df_3[col_name].max()
 
         max_path = path[:-5] + '_aggregated_max.xlsx'
-        df_3.to_excel(max_path)
+        df_2.max().to_excel(max_path)
 
     print('data aggregated for:')
     print(path)
@@ -68,6 +65,23 @@ path_list = ['Wind\\offshoreProd_2015_GW.xlsx', 'Wind\\onshoreProd_2015_GW.xlsx'
 
 for path in path_list:
     aggregateRegions(data_path + path)
+
+# calculate operating rates (wind, pv, ror)
+path_list = ['Wind\\offshoreProd_2015_GW.xlsx', 'Wind\\onshoreProd_2015_GW.xlsx',
+             'PV\\PVProd_2015_GW.xlsx', 'PV\\PVProd_withCSPadded_2015.xlsx',
+             'HydroPower\\rorProd_2015_GW.xlsx']
+
+for path in path_list:
+    path = data_path + path
+    df_aggregated_power = pd.read_excel(path[:-5] + '_aggregated' + '.xlsx')
+
+    max_path = path[:-5] + '_aggregated_max.xlsx'
+    df_max_capacity = pd.read_excel(max_path)
+
+    df_operating_rate = pd.DataFrame()
+    for nation in df_max_capacity.index:
+        df_operating_rate[nation] = df_aggregated_power[nation] / df_max_capacity.loc[nation, 0]
+    df_operating_rate.to_excel(path[:-5] + '_operating_rate' + '.xlsx')
 
 # network aggregation
 path_list_2 = ['ElectricGrid\\cableCapacity_GW.xlsx',
