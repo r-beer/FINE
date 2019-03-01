@@ -36,7 +36,10 @@ def aggregateRegions(path, col_and_index=False, replace_type=None):
                         df_2.loc[col_nation[-2:], row_nation[-2:]] = 1
                 elif replace_type == 'mean':
                     df_2.loc[col_nation[-2:], row_nation[-2:]] += df.loc[col_nation, row_nation].mean().mean()
+                if col_nation == row_nation:
+                    df_2.loc[col_nation[-2:], row_nation[-2:]] = 0
 
+        df_2.fillna(0)
         df_2.to_excel(path[:-5] + '_aggregated' + '.xlsx')
 
     else:
@@ -47,6 +50,8 @@ def aggregateRegions(path, col_and_index=False, replace_type=None):
         df_2.to_excel(path[:-5] + '_aggregated' + '.xlsx')
 
         max_path = path[:-5] + '_aggregated_max.xlsx'
+
+        df_2.fillna(0, inplace=True)
         df_2.max().to_excel(max_path)
 
     print('data aggregated for:')
@@ -81,7 +86,8 @@ for path in path_list:
     df_operating_rate = pd.DataFrame()
     for nation in df_max_capacity.index:
         df_operating_rate[nation] = df_aggregated_power[nation] / df_max_capacity.loc[nation, 0]
-    df_operating_rate.to_excel(path[:-5] + '_operating_rate' + '.xlsx')
+    df_operating_rate.fillna(0, inplace=True)
+    df_operating_rate.to_excel(path[:-7] + 'operating_rate' + '.xlsx')
 
 # network aggregation
 path_list_2 = ['ElectricGrid\\cableCapacity_GW.xlsx',

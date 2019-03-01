@@ -488,9 +488,10 @@ def plotLocations(locationsShapeFileName, indexColumn, plotLocNames=False, crs='
     if ax is None:
         fig, ax = plt.subplots(1, 1, figsize=figsize, **kwargs)
 
-    ax.set_aspect("equal")
-    ax.axis("off")
-    gdf.plot(ax=ax, facecolor=faceColor, edgecolor=edgeColor, linewidth=linewidth)
+    # ax.set_aspect("equal")
+    # ax.axis("off")
+    gdf.plot(ax=ax,
+             facecolor=faceColor, edgecolor=edgeColor, linewidth=linewidth)
     if plotLocNames:
         bbox_props = dict(boxstyle="round,pad=0.3", fc="w", ec="0.5", alpha=0.9)
         for ix, row in gdf.iterrows():
@@ -710,8 +711,12 @@ def plotLocationalColorMap(esM, compName, locationsShapeFileName, indexColumn, p
         data = data.sum(axis=1)
     gdf = gpd.read_file(locationsShapeFileName).to_crs({'init': crs})
     if perArea:
-        gdf.loc[gdf[indexColumn] == data.index, "data"] = \
-            data.fillna(0).values/(gdf.loc[gdf[indexColumn] == data.index].geometry.area/areaFactor**2)
+        for idx in gdf[indexColumn]:
+            if idx in data.index:
+                gdf.loc[gdf[indexColumn] == idx, "data"] = data.fillna(0).loc[idx] / (gdf.loc[gdf[indexColumn] == idx].geometry.area / areaFactor ** 2)
+
+    #     gdf.loc[gdf[indexColumn] == data.index, "data"] = \
+    #             data.fillna(0).values/(gdf.loc[gdf[indexColumn] == data.index].geometry.area/areaFactor**2)
     else:
         gdf.loc[gdf[indexColumn] == data.index, "data"] = data.fillna(0).values
     vmax = gdf["data"].max() if vmax == -1 else vmax
