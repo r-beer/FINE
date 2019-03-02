@@ -29,7 +29,7 @@ def getData():
     capacityMax = pd.read_excel(os.path.join(inputDataPath, 'SpatialData', 'Wind', on_max_path),
                                 index_col=0, squeeze=True)
     operationRateMax = pd.read_excel(os.path.join(inputDataPath,
-                                                  'SpatialData', 'Wind', on_path))
+                                                  'SpatialData', 'Wind', on_path), index_col=0)
     data.update({'Wind (onshore), capacityMax': capacityMax})
     data.update({'Wind (onshore), operationRateMax': operationRateMax})
 
@@ -40,7 +40,7 @@ def getData():
     capacityMax = pd.read_excel(os.path.join(inputDataPath, 'SpatialData', 'Wind', off_max_path),
                                 index_col=0, squeeze=True)
     operationRateMax = pd.read_excel(
-        os.path.join(inputDataPath, 'SpatialData', 'Wind', off_path))
+        os.path.join(inputDataPath, 'SpatialData', 'Wind', off_path), index_col=0)
     data.update({'Wind (offshore), capacityMax': capacityMax})
     data.update({'Wind (offshore), operationRateMax': operationRateMax})
 
@@ -49,7 +49,7 @@ def getData():
     pv_max_path = 'PVProd_2015_GW_aggregated_max.xlsx'  # 'maxCapacityPV_GW_el.xlsx'
     capacityMax = pd.read_excel(os.path.join(inputDataPath, 'SpatialData', 'PV', pv_max_path),
                                 index_col=0, squeeze=True)
-    operationRateMax = pd.read_excel(os.path.join(inputDataPath, 'SpatialData', 'PV', pv_path))
+    operationRateMax = pd.read_excel(os.path.join(inputDataPath, 'SpatialData', 'PV', pv_path), index_col=0)
 
     data.update({'PV, capacityMax': capacityMax})
     data.update({'PV, operationRateMax': operationRateMax})
@@ -59,7 +59,7 @@ def getData():
     ror_max_path = 'rorProd_2015_GW_aggregated_max.xlsx'  # 'fixCapacityROR_GW_el.xlsx'
 
     operationRateFix = pd.read_excel(os.path.join(inputDataPath, 'SpatialData', 'HydroPower',
-                                                  ror_path))
+                                                  ror_path), index_col=0)
     capacityFix = pd.read_excel(os.path.join(inputDataPath, 'SpatialData', 'HydroPower', ror_max_path),
                                 index_col=0, squeeze=True)
     #
