@@ -224,6 +224,7 @@ def checkLocationSpecficDesignInputParams(comp, esM):
         if data is not None:
             if comp.dimension == '1dim':
                 if not isinstance(data, pd.Series):
+                    print(data)
                     raise TypeError('Input data has to be a pandas Series')
                 checkRegionalIndex(esM, data)
             elif comp.dimension == '2dim':
